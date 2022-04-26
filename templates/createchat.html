@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+
+
+  <form action="/createchat" method="post" >
+    <input type="text" placeholder="Enter friend name" name="name">
+    <button type="submit">Login</button>
+
+</form>
+
+{% for i in chatnumber%}
+<a href="{{url_for('main',value=i.chat_id)}}">{{i.chat_id}}</a>
+{% endfor %}
+</body>
+</html>
