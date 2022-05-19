@@ -5,10 +5,15 @@
     <title>Title</title>
 </head>
 <body>
+<img  width="200" height="200" id="imgElem"/>
+<input type="file" name="" id="fileId"
+        onchange="imageUploaded()">
 <script src="/static/jquery-3.6.0.min.js"></script>
+<!-- <script src="/static/ggg.js"></script>-->
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
 <script type="text/javascript" charset="utf-8">
-
+let base64String = "2";
 $(document).ready(function(){
 var user=$('#user').text()
 var chat=$('#chat').text()
@@ -16,8 +21,13 @@ var chat=$('#chat').text()
 
      socket.on('message', function(data) {
         $("#messages").append('<li> '+data['user']+":"+data['msg']+'</li>');
+        console.log(data['base64String']);
+        var baseStr64=data['base64String'];
+
+        imgElem.setAttribute('src', "data:image/jpg;base64," + baseStr64);
+
     });
-      $("#sendbutton").on('click', function(){socket.send({msg:$('#myMessage').val(),chat:chat, user:user});
+      $("#sendbutton").on('click', function(){socket.send({msg:$('#myMessage').val(),chat:chat, user:user,  base64String:base64String});
       $('myMessage').val('');
     });
 
@@ -35,5 +45,33 @@ var chat=$('#chat').text()
 </div>
 <input type="text" id="myMessage">
 <button id="sendbutton">send</button>
+
+
 </body>
+<script>
+
+function imageUploaded() {
+    var file = document.querySelector(
+        'input[type=file]')['files'][0];
+        console.log(file);
+
+    var reader = new FileReader();
+    console.log("next");
+
+    reader.onload = function () {
+        base64String = reader.result.replace("data:", "")
+            .replace(/^.+,/, "");
+
+        imageBase64Stringsep = base64String;
+
+        // alert(imageBase64Stringsep);
+
+    }
+    reader.readAsDataURL(file);
+}
+
+function displayString() {
+    console.log("Base64String about to be printed");
+    alert(base64String);
+}</script>
 </html>

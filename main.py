@@ -212,6 +212,7 @@ def handleMessage(data):
     print(data)
     if current_user.is_authenticated:
         send(data, broadcast=True)
+        print(data['base64String'])
         message = ChatMessages(username=current_user.email, msg=data['msg'], chat=data['chat'])
         db.session.add(message)
         db.session.commit()
