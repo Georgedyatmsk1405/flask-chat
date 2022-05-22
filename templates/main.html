@@ -5,9 +5,14 @@
     <title>Title</title>
 </head>
 <body>
-<img  width="200" height="200" id="imgElem"/>
-<input type="file" name="" id="fileId"
-        onchange="imageUploaded()">
+<form>
+  <div>
+    <label>Select file to upload</label>
+    <input type="file">
+  </div>
+  <button id="submitt" type="submitt">Convert</button>
+</form>
+
 <script src="/static/jquery-3.6.0.min.js"></script>
 <!-- <script src="/static/ggg.js"></script>-->
 
@@ -17,61 +22,74 @@ let base64String = "2";
 $(document).ready(function(){
 var user=$('#user').text()
 var chat=$('#chat').text()
+var friends=$('#friends').text()
+    var private_socket=io.connect('http://127.0.0.1:5000/private');
+
     var socket = io.connect('http://127.0.0.1:5000');
+    console.log(socket);
+
 
      socket.on('message', function(data) {
-        $("#messages").append('<li> '+data['user']+":"+data['msg']+'</li>');
-        console.log(data['base64String']);
-        var baseStr64=data['base64String'];
-
-        imgElem.setAttribute('src', "data:image/jpg;base64," + baseStr64);
+        
+        $("#messages").append('<li> '+data['user']+":"+data['msg']);
+        
+    
 
     });
-      $("#sendbutton").on('click', function(){socket.send({msg:$('#myMessage').val(),chat:chat, user:user,  base64String:base64String});
+      $("#sendbutton").on('click', function(){ private_socket.emit('username',{'chat':chat,'sisid': socket.id});socket.send({msg:$('#myMessage').val(),chat:chat, user:user, friends:friends});
       $('myMessage').val('');
     });
 
-
+  console.log(socket);
  });
 </script>
 <ul id="messages">
     {%for mes in messages%}
-    <li>{{mes.username}}+': '+{{mes.msg}}</li>
+
+    <li>{{mes.username}}+': '+{{mes.msg}} <img width="40" height="100" src="http://127.0.0.1:5000/static/path/{{mes.filename}}"></li>
     {%endfor%}
 </ul>
 <div id="user">{{user}}
 </div>
 <div id="chat">{{chat_id}}
 </div>
+
+<div id="friends">{{friends}}
+</div>
 <input type="text" id="myMessage">
 <button id="sendbutton">send</button>
+<script type="text/javascript">
+    var chatt=document.getElementById('chat').innerHTML;
+    var userr=document.getElementById('user').innerHTML;
+    console.log(chatt);
+     var button = document.getElementById("submitt");
+     button.addEventListener("click", async function() { var input = document.querySelector('input[type="file"]');
 
+var formData = new FormData();
+formData.append('file', input.files[0]);
+console.log(input.filename);
+formData.append('chat', chatt);
+formData.append('user', userr);
+
+
+const response= await fetch(`http://127.0.0.1:5000/filehandler`, {method: 'POST',
+  body: formData,
+  files:input.files[0],
+  mode: 'cors',});
+  console.log('dddds')
+ console.log(response.text())
+
+
+
+
+
+
+// Display the key/value pairs
+
+});
+
+</script>
 
 </body>
-<script>
 
-function imageUploaded() {
-    var file = document.querySelector(
-        'input[type=file]')['files'][0];
-        console.log(file);
-
-    var reader = new FileReader();
-    console.log("next");
-
-    reader.onload = function () {
-        base64String = reader.result.replace("data:", "")
-            .replace(/^.+,/, "");
-
-        imageBase64Stringsep = base64String;
-
-        // alert(imageBase64Stringsep);
-
-    }
-    reader.readAsDataURL(file);
-}
-
-function displayString() {
-    console.log("Base64String about to be printed");
-    alert(base64String);
-}</script>
 </html>
