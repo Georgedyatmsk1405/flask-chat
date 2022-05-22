@@ -183,7 +183,7 @@ def filehandler():
         print('succse')
 
         data=int(request.form.get('chat'))
-        userr = str(request.form.get('user'))
+        userr = current_user.email
         file = request.files['file']
         #print(file.filename)
         #msg = base64.b64encode(file.read())
@@ -199,11 +199,11 @@ def filehandler():
         db.session.add(message)
 
         db.session.commit()
-        jsonobj={'filename':filename}
+
         print('did it')
-        print( jsonify(jsonobj))
+
         
-        return {'dsdsd':'sdds'}
+        return redirect(url_for('main',chat_id=data))
 
 
 

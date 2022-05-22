@@ -5,10 +5,11 @@
     <title>Title</title>
 </head>
 <body>
-<form>
+<form action = "/filehandler" method = "POST" enctype = "multipart/form-data">
   <div>
     <label>Select file to upload</label>
-    <input type="file">
+    <input type="file" name="file">
+         <input  type="text" name="chat"  value={{chat_id}}>
   </div>
   <button id="submitt" type="submitt">Convert</button>
 </form>
@@ -58,37 +59,37 @@ var friends=$('#friends').text()
 </div>
 <input type="text" id="myMessage">
 <button id="sendbutton">send</button>
-<script type="text/javascript">
-    var chatt=document.getElementById('chat').innerHTML;
-    var userr=document.getElementById('user').innerHTML;
-    console.log(chatt);
-     var button = document.getElementById("submitt");
-     button.addEventListener("click", async function() { var input = document.querySelector('input[type="file"]');
+<!--<script type="text/javascript">-->
+<!--    var chatt=document.getElementById('chat').innerHTML;-->
+<!--    var userr=document.getElementById('user').innerHTML;-->
+<!--    console.log(chatt);-->
+<!--     var button = document.getElementById("submitt");-->
+<!--     button.addEventListener("click", async function() { var input = document.querySelector('input[type="file"]');-->
 
-var formData = new FormData();
-formData.append('file', input.files[0]);
-console.log(input.filename);
-formData.append('chat', chatt);
-formData.append('user', userr);
-
-
-const response= await fetch(`http://127.0.0.1:5000/filehandler`, {method: 'POST',
-  body: formData,
-  files:input.files[0],
-  mode: 'cors',});
-  console.log('dddds')
- console.log(response.text())
+<!--var formData = new FormData();-->
+<!--formData.append('file', input.files[0]);-->
+<!--console.log(input.filename);-->
+<!--formData.append('chat', chatt);-->
+<!--formData.append('user', userr);-->
 
 
+<!--const response= await fetch(`http://127.0.0.1:5000/filehandler`, {method: 'POST',-->
+<!--  body: formData,-->
+<!--  files:input.files[0],-->
+<!--  mode: 'cors',});-->
+<!--  console.log('dddds')-->
+<!-- console.log(response.text())-->
 
 
 
 
-// Display the key/value pairs
 
-});
 
-</script>
+<!--// Display the key/value pairs-->
+
+<!--});-->
+
+<!--</script>-->
 
 </body>
 
